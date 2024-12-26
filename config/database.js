@@ -2,10 +2,12 @@ const mongoose = require('mongoose');
 
  require("dotenv").config();
 
- exports. connect=()=>{
+ exports.connect=()=>{
       mongoose.connect(process.env.MONGODB_URL,{
         useNewUrlParser:true,
-        useUnifiedTopology:true
+        useUnifiedTopology:true,
+        tls: true,
+        tlsAllowInvalidCertificates: true,
       })
       .then(()=>{console.log("Connected Successfuly")})
       .catch((err) => {
