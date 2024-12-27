@@ -59,23 +59,22 @@ exports.login = async (req,res) => {
    try {
     //data fetch
 
-    const {email,password}=req.body;
+    const{email,password}=req.body;
 
 
     //validation on email and password
        if (!email || !password) {
            return res.status(400).json({
             success:false,
-            message:'Please fill all the details carrefully',
+            message:'Please fill all the details carefully',
            });
 
        }
          //check the user already exists
-          const user = await User.findOne({email});
+          let user = await User.findOne({email});
           //if not user is exist
            if(!user){
             return res.status(401).json({
-
                 success:false,
                 message:'User is not exsits',
             })
@@ -96,18 +95,20 @@ exports.login = async (req,res) => {
                                            {
                                               expiresIn:'2h',
                                            });
-               user.token=token;
+               user=user.toObject();
+               user.token= token;
                user.password=undefined;
+
                const options={
-                expires:new Date(date.now()+3 * 24 * 60 * 60 *1000),
+                expires: new Date(Date.now()+3 * 24 * 60 * 60 *1000),
                 httpOnly:true,
                }
-               res.cookie("token",token, options).status(200).json({
+               res.cookie("babbarCookie", token, options).status(200).json({
                 success:true,
                 token,
                 user,
                 message:"User Logged in successfully",
-               })
+               });
 
 
             }
